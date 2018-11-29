@@ -36,7 +36,7 @@ func Example() {
 	// <nil>
 }
 
-func ExampleEmitter_On() {
+func Example_on() {
 
 	// init emitter
 	e := emitter.NewEmitter()
@@ -52,7 +52,7 @@ func ExampleEmitter_On() {
 	// Output: hello world!
 }
 
-func ExampleEmitter_Once() {
+func Example_once() {
 
 	// init emitter
 	e := emitter.NewEmitter()
@@ -74,7 +74,7 @@ func ExampleEmitter_Once() {
 	// event not registered
 }
 
-func ExampleEmitter_Off() {
+func Example_off() {
 
 	// init emitter
 	e := emitter.NewEmitter()
