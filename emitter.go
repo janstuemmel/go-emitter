@@ -46,12 +46,30 @@ func NewEmitter() Emitter {
 
 // On registers a listener to a event
 func (e emitter) On(event string, listener Listener) {
+
+	// cannot register nil listener
+	if listener == nil {
+		return
+	}
+
+	for _, fn := range e.listeners[event] {
+
+		// permit register listener twice
+		if reflect.ValueOf(fn).Pointer() == reflect.ValueOf(listener).Pointer() {
+			return
+		}
+	}
+
 	e.listeners[event] = append(e.listeners[event], listener)
 }
 
 // Once registers a listener to a event
 // but execute only once
 func (e emitter) Once(event string, listener Listener) {
+
+	if listener == nil {
+		return
+	}
 
 	var wrapper Listener
 

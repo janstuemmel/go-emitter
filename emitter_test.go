@@ -101,6 +101,20 @@ func TestEmitter(t *testing.T) {
 
 	noop := func(val interface{}) {}
 
+	t.Run("nil listeners", func(t *testing.T) {
+
+		e := emitter.NewEmitter()
+
+		e.On("foo", nil)
+		e.Once("bar", nil)
+
+		errFoo := e.Emit("foo", nil)
+		errBar := e.Emit("bar", nil)
+
+		assert(t, "event not registered", errFoo.Error())
+		assert(t, "event not registered", errBar.Error())
+	})
+
 	t.Run("call", func(t *testing.T) {
 
 		// given
@@ -117,16 +131,19 @@ func TestEmitter(t *testing.T) {
 		assert(t, true, done)
 	})
 
-	t.Run("call twice", func(t *testing.T) {
+	t.Run("call event twice", func(t *testing.T) {
 
 		// given
 		e := emitter.NewEmitter()
 		calledWith := []interface{}{}
-		fun := func(val interface{}) {
+		fun1 := func(val interface{}) {
 			calledWith = append(calledWith, val)
 		}
-		e.On("foo", fun)
-		e.On("foo", fun)
+		fun2 := func(val interface{}) {
+			calledWith = append(calledWith, val)
+		}
+		e.On("foo", fun1)
+		e.On("foo", fun2)
 
 		// when
 		e.Emit("foo", 1)
@@ -158,6 +175,7 @@ func TestEmitter(t *testing.T) {
 
 		// given
 		e := emitter.NewEmitter()
+		e.On("bar", noop) // register another listener
 		e.On("foo", noop)
 
 		// when
@@ -209,6 +227,41 @@ func TestEmitter(t *testing.T) {
 
 		// then
 		assert(t, "event not registered", err.Error())
+		assert(t, 1, called)
+	})
+
+	t.Run("unregister second listener", func(t *testing.T) {
+
+		// given
+		e := emitter.NewEmitter()
+		fun := func(val interface{}) {}
+		e.On("foo", noop)
+		e.On("foo", fun)
+
+		// when
+		err := e.Off("foo", fun)
+
+		// then
+		assert(t, nil, err)
+	})
+
+	t.Run("duplicate listeners not allowed", func(t *testing.T) {
+
+		// given
+		e := emitter.NewEmitter()
+		called := 0
+		callback := func(val interface{}) {
+			called = called + 1
+		}
+
+		// register duplicate event listeners
+		e.Once("foo", callback)
+		e.Once("foo", callback)
+
+		// when
+		e.Emit("foo", nil)
+
+		// then
 		assert(t, 1, called)
 	})
 }
