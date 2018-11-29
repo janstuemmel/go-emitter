@@ -36,6 +36,67 @@ func Example() {
 	// <nil>
 }
 
+func ExampleEmitter_On() {
+
+	// init emitter
+	e := emitter.NewEmitter()
+
+	// register listener
+	e.On("foo", func(val interface{}) {
+		fmt.Printf("hello %s!", val)
+	})
+
+	// emit
+	e.Emit("foo", "world")
+
+	// Output: hello world!
+}
+
+func ExampleEmitter_Once() {
+
+	// init emitter
+	e := emitter.NewEmitter()
+
+	// register listener
+	e.Once("foo", func(val interface{}) {
+		fmt.Printf("hello %s!\n", val)
+	})
+
+	// emit
+	e.Emit("foo", "world")
+
+	err := e.Emit("foo", "huhu")
+
+	fmt.Println(err.Error())
+
+	// Output:
+	// hello world!
+	// event not registered
+}
+
+func ExampleEmitter_Off() {
+
+	// init emitter
+	e := emitter.NewEmitter()
+	foo := func(val interface{}) {
+		fmt.Printf("hello %s!\n", val)
+	}
+
+	// register listener
+	e.On("foo", foo)
+
+	// unregister listener
+	e.Off("foo", foo)
+
+	// emit
+	err := e.Emit("foo", "huhu")
+
+	fmt.Println(err.Error())
+
+	// Output:
+	// event not registered
+}
+
 func TestEmitter(t *testing.T) {
 
 	noop := func(val interface{}) {}

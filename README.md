@@ -1,4 +1,4 @@
-# go-emitter  [![Build Status](https://travis-ci.org/janstuemmel/go-emitter.svg?branch=master)](https://travis-ci.org/janstuemmel/go-emitter)
+# go-emitter  [![Build Status](https://travis-ci.org/janstuemmel/go-emitter.svg?branch=master)](https://travis-ci.org/janstuemmel/go-emitter) [![Godoc](https://godoc.org/github.com/janstuemmel/go-emitter?status.svg)](http://godoc.org/github.com/janstuemmel/go-emitter)
 
 A simple GO event emitter.
 

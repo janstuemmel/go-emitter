@@ -1,3 +1,8 @@
+/*
+
+Package emitter provides a simple event emitter
+
+*/
 package emitter
 
 import (
@@ -18,7 +23,7 @@ type (
 		Emit(string, interface{}) error
 	}
 
-	// Listener is a function with an empty interface value
+	// Listener is a function with an empty interface argument
 	Listener func(interface{})
 
 	// Emitter struct
